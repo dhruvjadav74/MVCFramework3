@@ -77,6 +77,11 @@ class accountController extends framework {
         $this->view('server');
     }
 
+  
+    
+    
+   
+
     public function signup(){
         $accountModel= $this->model('accountModel');
         $username= $this->input('firstname');
@@ -160,6 +165,38 @@ class accountController extends framework {
                                           } 
                                 
                                     } 
+
+                                    public function PostalCode(){
+                                        $accountModel= $this->model('accountModel');
+                                        $postalcode= $this->input('postalcode');
+                                    
+                                        if($accountModel->pincode($postalcode)){
+                                            echo "success";
+                                        }
+                                    }
+
+                                    public function Scplan(){
+                                        $accountModel= $this->model('accountModel');
+                                       $dateofservice  =$_POST['dateofservice'];
+                                       $servicehours= $_POST['servicehours'];
+                                      $comment= $_POST['comment'];
+                                       $pets=$_POST['pets'];
+                                     if($accountModel->plans($dateofservice,$servicehours,$comment,$pets)){
+                                        
+                                    }
+                                    }
+
+                                    public function add(){
+                                        $accountModel= $this->model('accountModel');
+                                        $street = $this->input('street');
+                                        $house = $this->input('house');
+                                        $postal=$this->input('postal');
+                                        $mobile = $this->input('Mobile');
+                                        $city = $this->input('city');
+                                        if($accountModel->addressdetails( $street, $house , $postal, $mobile, $city)){
+                                        
+                                        }
+                                    }
 
         }
 ?>

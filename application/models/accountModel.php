@@ -318,9 +318,83 @@ if(isset($_POST['submit'])){
 
 
     }
+    
+    public function pincode($postalcode){
+        if(isset($_POST['postalcode'])){
+            $postalcode = strip_tags($_POST['postalcode']);
+        
+            $con=mysqli_connect("localhost","root","","company");
+        
+            $sql="INSERT INTO registration(email) VALUES ('$postalcode')";
+            $result=mysqli_query($con,$sql);
+        
+            if($result){
+                echo "success";
+            }
+            else{
+                echo "no";
+            }
+        
+        }
+           }
+	
+           public function plans($dateofservice, $servicehours,$comment, $pets){
+            if(isset($_POST['dateofservice'])){
+            $con=mysqli_connect("localhost","root","","company");
+            $dateofservice=$_POST['dateofservice'];
+            $user_id=$_SESSION['user_id'];
+            $comment=$_POST['comment'];
+            $servicehours=$_POST['servicehours'];
+            $pets=$_POST['pets'];
+            if($pets='on'){
+                $pet='1';
+              }
+              else{
+                $pet='0';
+              }
+            $sql="insert into servicerequest(UserId,ServiceStartDate,ServiceHours,Comments,HasPets) values('$user_id','$dateofservice','$servicehours','$comment','$pet')";
+            $result=mysqli_query($con,$sql);
+            if($result){
+                echo"success";
+            }
+        }
+           }
 
 
+           public function addressdetails($street, $house , $postal, $mobile, $city){
+               
+$con=mysqli_connect("localhost","root","","company");
+
+
+if(isset($_POST['submit1'])){
+  $street = $_POST['street'];
+  $house = $_POST['house'];
+  $postal=$_POST['postal'];
+  $mobile = $_POST['Mobile'];
+  $city = $_POST['city'];
+  $user_id=$_SESSION['user_id'];
+
+  $emailquery = "select * from useraddress";
+  $query=mysqli_query($con,$emailquery);
+
+    $emailcount = mysqli_num_rows($query);
+
+  
+      $insertquery="INSERT INTO useraddress(UserId, AddressLine1, City, PostalCode,Mobile) VALUES ('$user_id','$street','$city','$postal', '$mobile')";
+      $iquery=mysqli_query($con,$insertquery);
+      
+  
 }
+
+
+           }
+        
+        
+        
+        
+        }
+
+
 
 
 ?>

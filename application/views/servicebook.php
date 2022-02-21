@@ -1,6 +1,4 @@
-<?php 
-	include("connection.php");
- ?>
+
 <?php
     session_start();
 
@@ -10,60 +8,7 @@
 
     }
 ?>
-<?php
 
-$con=mysqli_connect("localhost","root","","company");
-
-if(isset($_POST['submit'])){
-  
-  $event_dt=$_POST['dateofservice'];
-  $datas=$_POST['data'];
-  $user_id=$_SESSION['user_id'];
-  $allData=implode(" ",$datas);
-  $comment=$_POST['comment'];
-  $servicehours=$_POST['servicehours'];
-  $pets=$_POST['pets'];
-  if($pets='on'){
-    $pet='1';
-  }
-  else{
-    $pet='0';
-  }
-  $sql="insert into servicerequest (UserId,ServiceStartDate,ServiceHours,Comments,Extra,HasPets) values('$user_id','$event_dt','$servicehours','$comment','$allData','$pet')";
-  $result=mysqli_query($con,$sql);
-  if($result){
-      echo "inserted";
-      echo $pet;
-  }
-
-}
-elseif(isset($_POST['submit1'])){
-  $street = $_POST['street'];
-  $house = $_POST['house'];
-  $postal=$_POST['postal'];
-  $mobile = $_POST['Mobile'];
-  $city = $_POST['city'];
-  $user_id=$_SESSION['user_id'];
-
-  $emailquery = "select * from useraddress";
-  $query=mysqli_query($con,$emailquery);
-
-    $emailcount = mysqli_num_rows($query);
-
-  
-      $insertquery="INSERT INTO useraddress(UserId, AddressLine1, City, PostalCode,Mobile) VALUES ('$user_id','$street','$city','$postal', '$mobile')";
-      $iquery=mysqli_query($con,$insertquery);
-      
-  
-}
-elseif(isset($_POST['third'])){
-
- $radio=$_POST['radioo'];
- $insert="INSERT INTO useraddress(Email) VALUES ('$radio')";
-  $iquery1=mysqli_query($con,$insert);
-}
-
-?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -75,12 +20,14 @@ elseif(isset($_POST['third'])){
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
      <link rel="stylesheet" type="text/css" href="http://cdn.dcodes.net/2/payment_icons/dc_payment_icons.css" />
      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    
+     
   </head>
   <title>Contact Us</title>
 </head>
 <body>
 		
-<?php include "components/header.php"; ?>
+<?php include "components/headerlog.php"; ?>
 
 
 
@@ -109,10 +56,18 @@ elseif(isset($_POST['third'])){
       <div class="container-fluid w-50" style="margin-right: 0px;" id="house">
       <div class="tab-regular">
             <ul class="nav nav-tabs " id="myTab" role="tablist">
-                <li class="nav-item"> <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Setup Service</a> </li>
-                <li class="nav-item"> <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Shedule & Plan</a> </li>
-                <li class="nav-item"> <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Your Details</a> </li>
-                <li class="nav-item"> <a class="nav-link" id="payment-tab" data-toggle="tab" href="#payment" role="tab" aria-controls="payment" aria-selected="false">Make Payment</a> </li>
+                <li class="nav-item"> <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><img
+                                    src="<?=ROOT?>/assets/Images/booknow/setup-service.png"
+                                    alt="">Setup Service</a> </li>
+                <li class="nav-item"> <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"><img
+                                    src="<?=ROOT?>/assets/Images/booknow/schedule.png"
+                                    alt="">Schedule & Plan</a> </li>
+                <li class="nav-item"> <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"><img
+                                    src="<?=ROOT?>/assets/Images/booknow/Details.png"
+                                    alt="">Your Details</a> </li>
+                <li class="nav-item"> <a class="nav-link" id="payment-tab" data-toggle="tab" href="#payment" role="tab" aria-controls="payment" aria-selected="false"><img
+                                    src="<?=ROOT?>/assets/Images/booknow/payment.png"
+                                    alt="">Make Payment</a> </li>
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -120,15 +75,19 @@ elseif(isset($_POST['third'])){
             <div class="row">
         <div class="col-md-auto">
            <p class="h5">Enter your postal code</p>
+           <form method="post" id="postalcodecheck">
            <div class="row">
              <div class="col-md-auto">
                   <div class="form-group">
-                      <input type="number" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
+                      <input type="number" id="postal" class="form-control" placeholder="Postal Code">
+                      <span id="pincode_error" class="error_field" style="color:red;"></span>
                    </div>
             </div>
              <div class="col-md-auto">
-              <button type="button" class="btn" style="background-color:#1D7A8C;border-radius: 20px;border: 1px solid rgba(255, 255, 255, 0.5);height: 40px;width: auto; color: aliceblue;">Check Availability</button>
+              <button type="submit" id="submit"  class="btn" style="background-color:#1D7A8C;border-radius: 20px;border: 1px solid rgba(255, 255, 255, 0.5);height: 40px;width: auto; color: aliceblue;">Check Availability</button>
              </div>
+</form>
+            
            </div>
         </div>
       </div>
@@ -140,7 +99,7 @@ elseif(isset($_POST['third'])){
                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                   
         <div class="container-fluid" style="margin-top: 10px;">
-        <form method="POST" action="">
+        <form method="POST" action="" id="plan">
        
         
       <div class="row">
@@ -150,6 +109,7 @@ elseif(isset($_POST['third'])){
              <div class="col-md-auto">
                 <div class="form-group" style="width: 140px;">
                 <input type="datetime-local" name="dateofservice" id="dateofservice" style="height:38px;">
+                <span id="date_error" class="error_field" style="color:red;"></span>
                 </div>
             </div>
            </div>
@@ -164,6 +124,7 @@ elseif(isset($_POST['third'])){
                 <option id="5" value="Option 4">5.0 Hrs</option>
                 </select>
                 </div>
+                <span id="service_error" class="error_field" style="color:red;"></span>
         </div>
       </div>
        <p><hr/></p>
@@ -194,10 +155,10 @@ elseif(isset($_POST['third'])){
          <p><hr/></p>
            <div class="form-group">
              <p class="h5">Comment</p>
-                <textarea class="form-control"name="comment" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <textarea class="form-control"name="comment" id="comment" rows="3"></textarea>
            </div>
              <div class="form-group form-check">
-               <input type="checkbox" name="pets" class="form-check-input" id="exampleCheck1">
+               <input type="checkbox" name="pets" class="form-check-input" id="pets">
                <p class="h6">I have pets at home.</p>
             </div>
             <p><hr/></p>
@@ -213,7 +174,7 @@ elseif(isset($_POST['third'])){
                 <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                 <div class="container-fluid" style="margin-top: 10px;max-width: 900px;">
         <p class="h5">Enter your contact details,so we can surve you in better way!</p>
-        <form method="POST">
+        <form method="POST" action="http://localhost/MVCFramework/accountController/add" >
         <?php 
 include("connection.php");
  ?>
@@ -579,8 +540,7 @@ for (i = 0; i < acc.length; i++) {
     } 
   });
 }
-</script>
-		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+</script>	
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
@@ -614,21 +574,6 @@ for (i = 0; i < acc.length; i++) {
 
 
   }
-function loadXMLDoc() {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("link_wrapper").innerHTML =
-      this.responseText;
-    }
-  };
-  xhttp.open("GET", "<?php echo BASEURL; ?>/accountController/Server_address", true);
-  xhttp.send();
-}
-
-
-window.onload = loadXMLDoc;
-
 
 
 </script>
@@ -656,4 +601,86 @@ $('#dateofservice').on('change', function() {
   $('#cb1').click(function() {
     $("#").toggle(this.checked);
 });
+
+$(document).ready(function(){
+
+$("#check").click(function(){
+ });
+});
+
   </script>
+  <script type="text/javascript">
+
+$(document).ready(function(){
+  $("#postalcodecheck").submit(function(event){
+    event.preventDefault()
+
+    var postalcode= document.getElementById("postal").value
+    var error=""
+
+    if(postalcode==""){
+      $('#pincode_error').html("Please Enter Pincode")
+      error="yes";
+    }
+
+    if(error==""){
+
+    $.post("http://localhost/MVCFramework/accountController/PostalCode",{postalcode:postalcode},function(data){
+      console.log(data);
+      if(data="success"){
+        $("#profile-tab").tab("show");  
+      }
+    })
+    }
+    
+
+  })
+
+  $("#plan").submit(function(event){
+    event.preventDefault()
+
+    var dateofservice  = document.getElementById("dateofservice").value
+    var servicehours= document.getElementById("hours").value
+    var comment= document.getElementById("comment").value
+    var pets= document.getElementById("pets").value
+ 
+    var error=""
+    if(dateofservice==""){
+      $('#date_error').html("Please choose date and time")
+      error="yes";
+    }
+    if(servicehours=="Option 1"){
+      $('#service_error').html("Please choose service hours")
+      error="yes";
+    }
+
+    if(error==""){
+    $.post("http://localhost/MVCFramework/accountController/Scplan",{
+      dateofservice:dateofservice,servicehours:servicehours,comment:comment,pets:pets},function(data){
+     console.log(data);
+     
+  })
+  if(data="success"){
+        $("#contact-tab").tab("show");  
+      }
+    }
+    
+
+  })
+});
+function loadXMLDoc() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("link_wrapper").innerHTML =
+      this.responseText;
+    }
+  };
+  xhttp.open("GET", "<?php echo BASEURL; ?>/accountController/Server_address", true);
+  xhttp.send();
+},5000)
+
+
+window.onload = loadXMLDoc;
+
+</script>
